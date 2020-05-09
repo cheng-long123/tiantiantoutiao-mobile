@@ -33,11 +33,17 @@
      </van-cell-group>
      <!-- 登录表单 -->
     <div class="login-btn-wrap">
-         <van-button class="login-btn" type="info" block>登录</van-button>
+         <van-button
+         class="login-btn"
+         type="info"
+         block
+         @click="onLogin"
+         >登录</van-button>
     </div>
   </div>
 </template>
 <script>
+import { login } from '@/api/user'
 export default {
   name: 'LoginIndex',
   props: {},
@@ -45,14 +51,31 @@ export default {
   data () {
     return {
       user: {
-        mobile: '',
-        code: ''
+        mobile: '13988888888',
+        code: '246810'
       }
     }
   },
   computed: {},
   watch: {},
-  methods: {},
+  methods: {
+    async onLogin () {
+      try {
+        const res = await login(this.user)
+        console.log(res)
+        this.$toast({
+          message: '登陆成功',
+          position: top
+        }
+        )
+      } catch (err) {
+        this.$toast({
+          message: '登陆失败,手机号或验证码错误',
+          position: top
+        })
+      }
+    }
+  },
   created () {},
   mounted () {},
   beforeDestroy () {}
