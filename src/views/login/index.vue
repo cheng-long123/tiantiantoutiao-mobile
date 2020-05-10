@@ -7,12 +7,20 @@
         @click-left="$router.back()"
      />
      <!-- 登录表单 -->
-     <van-cell-group>
+     <van-form
+      :show-error="false"
+      :show-error-message="false"
+       @submit="onLogin"
+        @failed="onFailed"
+
+     >
         <van-field
             icon-prefix="icon"
             v-model="user.mobile"
             left-icon="shouji"
             placeholder="请输入手机号"
+            name="mobile"
+             :rules="formRules.mobile"
         />
         <van-field
             class="icon-yzm"
@@ -20,7 +28,9 @@
             v-model="user.code"
             clearable
             left-icon="yanzhengma"
+            name="code"
             placeholder="请输入验证码"
+          :rules="formRules.code"
         >
         <template #button>
         <van-button
@@ -30,18 +40,18 @@
         >发送验证码</van-button>
         </template>
         </van-field>
-     </van-cell-group>
+        <!-- 登录按钮 -->
+          <div class="login-btn-wrap">
+              <van-button
+              class="login-btn"
+              type="info"
+              block
+              >登录</van-button>
+          </div>
+         <!-- 登录按钮 -->
+         </van-form>
      <!-- 登录表单 -->
-     <!-- 登录按钮 -->
-    <div class="login-btn-wrap">
-         <van-button
-         class="login-btn"
-         type="info"
-         block
-         @click="onLogin"
-         >登录</van-button>
-    </div>
-      <!-- 登录按钮 -->
+
   </div>
 </template>
 <script>
@@ -56,6 +66,17 @@ export default {
       user: {
         mobile: '13911111111',
         code: '246810'
+      },
+      // 表单验证
+      formRules: {
+        mobile: [
+          { required: true, message: '请输入手机号' },
+          { pattern: /^1[3|4|5|7|8]\d{9}$/, message: '手机号格式错误' }
+        ],
+        code: [
+          { required: true, message: '请输入验证码' },
+          { pattern: /^\d{6}$/, message: '验证码格式错误' }
+        ]
       }
     }
   },
@@ -75,7 +96,19 @@ export default {
         Toast.success('登陆成功')
       } catch (err) {
         // 失败
-        Toast.fail('登陆失败,手机号或验证码错误')
+        console.dir(err)
+        if (err.response.request.status === 400) {
+          Toast.fail('登陆失败,手机号或验证码错误')
+        }
+      }
+    },
+    onFailed (error) {
+      // console.dir(error)
+      if (error.errors[0]) {
+        Toast({
+          message: error.errors[0].message,
+          position: 'top'
+        })
       }
     }
   },
