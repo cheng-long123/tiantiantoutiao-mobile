@@ -36,6 +36,7 @@
         >
         <template #button>
           <van-count-down
+          class="timeSms"
           v-if="isShowSms"
           :time="time"
           format=" ss s获取"
@@ -104,11 +105,11 @@ export default {
         duration: 0
       })
       try {
-        await login(this.user)
+        const { data } = await login(this.user)
+        this.$store.commit('setUser', data.data)
         // console.log(res)
         // 成功
         Toast.success('登陆成功')
-        // 解除禁用
       } catch (err) {
         // 失败
         console.dir(err)
@@ -167,13 +168,15 @@ export default {
         color: #666666;
         font-size: 11px;
     }
-    .van-cell-group{
-      .icon-yzm{
-        .van-field__left-icon{
-            margin-top:10px ;
-        }
-      }
-
+    .timeSms{
+      width: 77px;
+      height: 30px;
+      text-align: center;
+      line-height: 30px;
+      border-radius: 20px;
+      background-color: #ededed;
+      color: #666666;
+      font-size: 11px;
     }
 }
 .login-btn-wrap{
