@@ -10,6 +10,8 @@
      <van-form
       :show-error="false"
       :show-error-message="false"
+      validate-first
+      center
        @submit="onLogin"
         @failed="onFailed"
 
@@ -33,10 +35,19 @@
           :rules="formRules.code"
         >
         <template #button>
+          <van-count-down
+          v-if="isShowSms"
+          :time="time"
+          format=" ss s获取"
+          @finish="isShowSms = false"
+           />
         <van-button
+        v-else
         class="send-btn"
         size="small"
+        :disabled="isDisabled"
         round
+        @click.prevent="onSendSms"
         >发送验证码</van-button>
         </template>
         </van-field>
@@ -55,7 +66,7 @@
   </div>
 </template>
 <script>
-import { login } from '@/api/user'
+import { login, sendSms } from '@/api/user'
 import { Toast } from 'vant'
 export default {
   name: 'LoginIndex',
@@ -77,7 +88,10 @@ export default {
           { required: true, message: '请输入验证码' },
           { pattern: /^\d{6}$/, message: '验证码格式错误' }
         ]
-      }
+      },
+      time: 1000 * 60, // 倒计时
+      isShowSms: false,
+      isDisabled: false
     }
   },
   computed: {},
@@ -94,6 +108,7 @@ export default {
         // console.log(res)
         // 成功
         Toast.success('登陆成功')
+        // 解除禁用
       } catch (err) {
         // 失败
         console.dir(err)
@@ -107,6 +122,34 @@ export default {
       if (error.errors[0]) {
         Toast({
           message: error.errors[0].message,
+          position: 'top'
+        })
+      }
+    },
+    async onSendSms () {
+      this.isDisabled = true
+      try {
+        // 成功
+        const data = await sendSms(this.user.mobile)
+        // 显示时间
+        this.isShowSms = true
+        this.isDisabled = false
+        console.log(data)
+      } catch (err) {
+        // 失败解禁
+        this.isDisabled = false
+        let message = ''
+        // 失败
+        console.dir(err)
+        if (err && err.response && err.response.status === 429) {
+          message = '发送太频繁，请稍后重试'
+        } else if (err.name === 'mobile') {
+          message = err.message
+        } else {
+          message = '发送失败,请稍后重试'
+        }
+        Toast({
+          message: message,
           position: 'top'
         })
       }
