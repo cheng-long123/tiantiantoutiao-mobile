@@ -32,6 +32,7 @@
         </van-field>
      </van-cell-group>
      <!-- 登录表单 -->
+     <!-- 登录按钮 -->
     <div class="login-btn-wrap">
          <van-button
          class="login-btn"
@@ -40,10 +41,12 @@
          @click="onLogin"
          >登录</van-button>
     </div>
+      <!-- 登录按钮 -->
   </div>
 </template>
 <script>
 import { login } from '@/api/user'
+import { Toast } from 'vant'
 export default {
   name: 'LoginIndex',
   props: {},
@@ -51,7 +54,7 @@ export default {
   data () {
     return {
       user: {
-        mobile: '13988888888',
+        mobile: '13911111111',
         code: '246810'
       }
     }
@@ -60,19 +63,19 @@ export default {
   watch: {},
   methods: {
     async onLogin () {
+      Toast.loading({
+        message: '登陆中...', // 文本提示
+        forbidClick: true, // 禁止背景点击
+        duration: 0
+      })
       try {
-        const res = await login(this.user)
-        console.log(res)
-        this.$toast({
-          message: '登陆成功',
-          position: top
-        }
-        )
+        await login(this.user)
+        // console.log(res)
+        // 成功
+        Toast.success('登陆成功')
       } catch (err) {
-        this.$toast({
-          message: '登陆失败,手机号或验证码错误',
-          position: top
-        })
+        // 失败
+        Toast.fail('登陆失败,手机号或验证码错误')
       }
     }
   },
@@ -87,6 +90,14 @@ export default {
         background-color: #ededed;
         color: #666666;
         font-size: 11px;
+    }
+    .van-cell-group{
+      .icon-yzm{
+        .van-field__left-icon{
+            margin-top:10px ;
+        }
+      }
+
     }
 }
 .login-btn-wrap{
