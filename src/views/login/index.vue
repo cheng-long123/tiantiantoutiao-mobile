@@ -8,6 +8,7 @@
      />
      <!-- 登录表单 -->
      <van-form
+     ref="login-form"
       :show-error="false"
       :show-error-message="false"
       validate-first
@@ -130,6 +131,7 @@ export default {
     async onSendSms () {
       this.isDisabled = true
       try {
+        await this.$refs['login-form'].validate('mobile')
         // 成功
         const data = await sendSms(this.user.mobile)
         // 显示时间
