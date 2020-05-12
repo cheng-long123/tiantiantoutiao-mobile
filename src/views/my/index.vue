@@ -19,20 +19,20 @@
      </div>
      <van-grid :border="false">
       <van-grid-item class="user-item">
-        <div class="span">{{currentUser.art_count}}</div>
+        <div class="count">{{currentUser.art_count}}</div>
         <div class="text">头条</div>
       </van-grid-item>
       <van-grid-item class="user-item">
-        <div class="span">{{currentUser.follow_count}}</div>
+        <div class="count">{{currentUser.follow_count}}</div>
         <div class="text">关注</div>
       </van-grid-item>
       <van-grid-item class="user-item">
-        <div class="span">8</div>
-        <div class="text">{{currentUser.fans_count}}</div>
+        <div class="count">{{currentUser.fans_count}}</div>
+        <div class="text">粉丝</div>
       </van-grid-item>
       <van-grid-item class="user-item">
-        <div class="span">8</div>
-        <div class="text">{{currentUser.like_count}}</div>
+        <div class="count">{{currentUser.like_count}}</div>
+        <div class="text">获赞</div>
       </van-grid-item>
     </van-grid>
     </div>
@@ -111,6 +111,9 @@ export default {
   box-sizing: border-box;
   font-size: 16px;
   color: #fff;
+  .count{
+    font-size: 14px;
+  }
   .user-base-info{
     display: flex;
     justify-content: space-between;
