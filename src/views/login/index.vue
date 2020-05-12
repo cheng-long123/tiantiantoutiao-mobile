@@ -111,6 +111,7 @@ export default {
         // console.log(res)
         // 成功
         Toast.success('登陆成功')
+        this.$router.back()
       } catch (err) {
         // 失败
         console.dir(err)

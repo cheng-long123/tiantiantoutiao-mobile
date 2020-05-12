@@ -1,6 +1,6 @@
 /* 本地存储 */
 // 存储
-export const setUser = (value, name) => {
+export const setUser = (name, value) => {
 // 如果values是对象就转换为字符串
   if (typeof value === 'object') {
     value = JSON.stringify(value)

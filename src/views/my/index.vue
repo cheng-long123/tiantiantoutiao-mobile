@@ -1,6 +1,6 @@
 <template>
   <div class='my-container'>
-    <div class="user-info">
+    <div class="user-info" v-if="user">
      <div class="user-base-info">
         <div class="user-wrap">
         <div class="user-wrap-title">
@@ -36,18 +36,31 @@
       </van-grid-item>
     </van-grid>
     </div>
+    <div
+    v-else
+    class="not-login"
+    >
+    <img @click = "$router.push('./login')" src="./shouji.png" alt="">
+    <span>登录/注册</span>
+    </div>
     <van-grid :column-num="2" class="icon-grid" >
     <van-grid-item  class="icon" icon-prefix="icon" icon="shoucang" text="收藏" />
     <van-grid-item class="icon" icon-prefix="icon" icon="lishi" text="历史" />
     </van-grid>
     <van-cell title="消息通知" is-link to=""/>
     <van-cell title="小智同学" is-link to=""/>
-    <van-cell class="dropout" title="退出登录"  to="">
+    <van-cell
+    v-if="user"
+    class="dropout"
+    title="退出登录"
+    @click = "onLogout"
+     >
       <!-- <span>退出登录</span> -->
     </van-cell>
    </div>
 </template>
 <script>
+import { mapState } from 'vuex'
 export default {
   name: 'MyIndex',
   props: {},
@@ -55,9 +68,25 @@ export default {
   data () {
     return {}
   },
-  computed: {},
+  computed: {
+    ...mapState(['user'])
+  },
   watch: {},
-  methods: {},
+  methods: {
+    onLogout () {
+      this.$dialog.confirm({
+        title: '退出提示',
+        message: '你确定退出吗？'
+      })
+        .then(() => {
+          // on confirm
+          this.$store.commit('setUser', null)
+        })
+        .catch(() => {
+          // on cancel
+        })
+    }
+  },
   created () {},
   mounted () {},
   beforeDestroy () {}
@@ -124,5 +153,25 @@ export default {
    text-align: center;
    color:#d86262;
 
+  }
+  // 未登录
+  .not-login{
+    height: 180px;
+    background:url('./user-bg.png') no-repeat;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+      img{
+        width: 66px;
+        height: 66px;
+        border-radius: 50%;
+        border: 1px solid #fff;
+      }
+      span{
+        color: #fff;
+        font-size: 14px;
+      }
   }
 </style>
