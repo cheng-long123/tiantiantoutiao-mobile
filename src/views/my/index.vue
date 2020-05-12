@@ -8,9 +8,9 @@
            <van-image
            class="avatar-img"
            round
-           src="https://img.yzcdn.cn/vant/cat.jpeg" />
+           :src="currentUser.photo" />
           </div>
-          <div class="user-name">昵称</div>
+          <div class="user-name">{{currentUser.name}}</div>
         </div>
       </div>
       <div class="compile-user">
@@ -19,20 +19,20 @@
      </div>
      <van-grid :border="false">
       <van-grid-item class="user-item">
-        <div class="span">8</div>
+        <div class="span">{{currentUser.art_count}}</div>
         <div class="text">头条</div>
       </van-grid-item>
       <van-grid-item class="user-item">
-        <div class="span">8</div>
+        <div class="span">{{currentUser.follow_count}}</div>
         <div class="text">关注</div>
       </van-grid-item>
       <van-grid-item class="user-item">
         <div class="span">8</div>
-        <div class="text">粉丝</div>
+        <div class="text">{{currentUser.fans_count}}</div>
       </van-grid-item>
       <van-grid-item class="user-item">
         <div class="span">8</div>
-        <div class="text">获赞</div>
+        <div class="text">{{currentUser.like_count}}</div>
       </van-grid-item>
     </van-grid>
     </div>
@@ -61,12 +61,15 @@
 </template>
 <script>
 import { mapState } from 'vuex'
+import { getUserInfo } from '@/api/user'
 export default {
   name: 'MyIndex',
   props: {},
   components: {},
   data () {
-    return {}
+    return {
+      currentUser: []
+    }
   },
   computed: {
     ...mapState(['user'])
@@ -85,9 +88,16 @@ export default {
         .catch(() => {
           // on cancel
         })
+    }, // 获取登录用户信息
+    async getUserInfo () {
+      const { data } = await getUserInfo()
+      console.log(data)
+      this.currentUser = data.data
     }
   },
-  created () {},
+  created () {
+    this.getUserInfo()
+  },
   mounted () {},
   beforeDestroy () {}
 }
