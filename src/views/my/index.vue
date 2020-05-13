@@ -68,7 +68,7 @@ export default {
   components: {},
   data () {
     return {
-      currentUser: []
+      currentUser: {}
     }
   },
   computed: {
