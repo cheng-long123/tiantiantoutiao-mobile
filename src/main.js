@@ -4,6 +4,7 @@ import router from './router'
 import store from './store'
 // 引入vant组件
 import Vant from 'vant'
+import dayjs from '@/utils/dayjs'
 import 'vant/lib/index.css'
 // 自动设置 REM REM适配（根据html字体大小）
 import 'amfe-flexible'
@@ -16,6 +17,7 @@ Vue.config.productionTip = false
 // 创建vue根实例
 new Vue({
   router,
+  dayjs,
   store,
   render: h => h(App)
 }).$mount('#app')
