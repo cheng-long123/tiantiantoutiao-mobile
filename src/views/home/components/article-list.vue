@@ -1,20 +1,28 @@
 <template>
   <div class='article-list'>
-     <van-list
-      v-model="loading"
-      :finished="finished"
-      finished-text="没有更多了"
-      @load="onLoad"
-        >
-      <van-cell
-      v-for="item in list"
-      :key="item"
-      :title="item"
-      />
-    </van-list>
+      <van-pull-refresh
+      v-model="pullToRefresh"
+      :success-text="refreshText"
+      :success-duration="1500"
+      @refresh="onRefresh"
+      >
+        <van-list
+          v-model="loading"
+          :finished="finished"
+          finished-text="没有更多了"
+          @load="getArticles"
+            >
+          <van-cell
+          v-for="(article,index) in articles"
+          :key="index"
+          :title="article.title"
+          />
+        </van-list>
+    </van-pull-refresh>
   </div>
 </template>
 <script>
+import { getArticles } from '@/api/article'
 export default {
   name: 'ArticleList',
   props: {
@@ -26,36 +34,68 @@ export default {
   components: {},
   data () {
     return {
-      list: [],
-      loading: false,
-      finished: false
+      articles: [],
+      loading: false, // 加载
+      finished: false, // 没有数据显示
+      timestamp: null, // 时间戳
+      pullToRefresh: false, // 下拉刷新
+      refreshText: '' // 刷新成功提示
     }
   },
   computed: {},
   watch: {},
   methods: {
-    onLoad () {
-      // 异步更新数据
-      // setTimeout 仅做示例，真实场景中一般为 ajax 请求
-      setTimeout(() => {
-        for (let i = 0; i < 10; i++) {
-          this.list.push(this.list.length + 1)
-        }
-
-        // 加载状态结束
-        this.loading = false
-
-        // 数据全部加载完成
-        if (this.list.length >= 40) {
-          this.finished = true
-        }
-      }, 1000)
+    async getArticles () {
+      // 发送请求
+      const { data } = await getArticles({
+        channel_id: this.channel.id,
+        timestamp: this.timestamp || Date.now(),
+        with_top: 1
+      })
+      const { results } = data.data
+      // 把数据push给articles
+      this.articles.push(...results)
+      this.loading = false
+      // 判断是否还有数据
+      if (results.length) {
+        this.timestamp = data.pre_timestamp
+      } else {
+        // 提示没更多数据
+        this.finished = true
+      }
+      // console.log(data)
+    },
+    // 下拉刷新
+    async onRefresh () {
+      // 发送请求
+      const { data } = await getArticles({
+        channel_id: this.channel.id,
+        timestamp: Date.now(),
+        with_top: 1
+      })
+      const { results } = data.data
+      // 刷新成功提示
+      this.$toast('刷新成功')
+      // 刷新成功关闭
+      this.pullToRefresh = false
+      // 更新提示
+      this.refreshText = `更新${results.length}调数据`
     }
   },
-  created () {},
+  created () {
+    this.getArticles()
+  },
   mounted () {},
   beforeDestroy () {}
 }
 </script>
 <style lang='less' scoped>
+.article-list{
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 90px;
+  bottom: 50px;
+  overflow-y: auto;
+}
 </style>

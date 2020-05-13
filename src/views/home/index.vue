@@ -1,38 +1,37 @@
 <template>
   <div class='home-container'>
-    <!-- 头部搜索 -->
-       <van-nav-bar
-        class="app-nav-bar"
-     >
-     <van-button
-     class="search-btn"
-     type="info"
-     slot="title"
-     icon="search"
-     round
-     >
-     搜索
-     </van-button>
-       </van-nav-bar>
-    <!-- 头部搜索 -->
-    <!-- tab 切换 -->
-    <van-tabs
-    v-model="active"
-    color="#3296fa"
-    line-width="20px"
-    line-height="4px"
-    swipeable
-    animated
-    >
-      <van-tab
-      v-for="channel in channels"
-      :title="channel.name"
-      :key="channel.id"
-      >
-      <article-list :channel="channel"/>
-      </van-tab>
-   </van-tabs>
-   <!-- tab 切换 -->
+          <!-- 头部搜索 -->
+            <van-nav-bar
+              class="app-nav-bar"
+          >
+          <van-button
+          class="search-btn"
+          type="info"
+          slot="title"
+          icon="search"
+          round
+          >
+          搜索
+          </van-button>
+            </van-nav-bar>
+          <!-- 头部搜索 -->
+          <!-- tab 切换 -->
+          <van-tabs
+          v-model="active"
+          color="#3296fa"
+          line-width="20px"
+          line-height="4px"
+          swipeable
+          >
+            <van-tab
+            v-for="channel in channels"
+            :title="channel.name"
+            :key="channel.id"
+            >
+            <article-list :channel="channel"/>
+            </van-tab>
+        </van-tabs>
+        <!-- tab 切换 -->
   </div>
 </template>
 <script>
@@ -46,7 +45,7 @@ export default {
   },
   data () {
     return {
-      active: 2,
+      active: 0,
       channels: []
     }
   },
