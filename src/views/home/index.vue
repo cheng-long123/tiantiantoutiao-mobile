@@ -41,9 +41,10 @@
         <!-- tab 切换 -->
         <!-- 弹出层 -->
             <van-popup
+             round
+            duration="0.5"
             v-model="isPopupShow"
             position="bottom"
-            closeable
             close-icon-position="top-left"
             get-container="body"
             :style="{ height: '100%' }"

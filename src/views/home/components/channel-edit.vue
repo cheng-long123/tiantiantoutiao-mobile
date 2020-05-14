@@ -1,5 +1,15 @@
 <template>
   <div class='channel-edit'>
+      <van-cell center class="close-popup">
+       <div
+       slot="title"
+       class="close"
+       @click = "$emit('close')"
+       >
+         <van-icon name="cross" />
+       </div>
+         <div slot="label" class="compile">编辑频道</div>
+      </van-cell>
      <van-cell
      center
      class="channel-title"
@@ -154,9 +164,22 @@ export default {
 }
 </script>
 <style lang='less' scoped>
-.channel-edit{
+ .channel-edit{
+     .close-popup{
+         height: 55px;
+         .close{
+             float: left;
+             font-size: 24px;
+             color: #3296fa;
+         }
+         .compile{
+             font-size: 18px;
+            text-align: center;
+            font-weight: 500px;
+            color: #000;
+         }
+     }
     .channel-title{
-        padding-top: 55px;
         .title{
         font-size: 16px;
         color: #333333;
@@ -175,6 +198,7 @@ export default {
             right: -5px;
             font-size: 14px;
             color: #333;
+              z-index: 10;
        }
        .van-grid-item__text{
            margin-top: 0;
