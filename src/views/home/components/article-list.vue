@@ -82,6 +82,8 @@ export default {
         with_top: 1
       })
       const { results } = data.data
+      // 刷新添加
+      this.articles.unshift(...results)
       // 刷新成功提示
       this.$toast('刷新成功')
       // 刷新成功关闭
