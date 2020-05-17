@@ -10,6 +10,7 @@
           slot="title"
           icon="search"
           round
+          to="/search"
           >
           搜索
           </van-button>

@@ -39,7 +39,7 @@
        :key="index"
        :icon="(isEdit && index !== 0) ? 'close' : ''"
        :text="userchannel.name"
-       @click="(index == 0 && isEdit ) ? '' :onUserChannelClick(userchannel, index)"
+       @click="onUserChannelClick(userchannel, index)"
        />
      </van-grid>
       <van-cell
@@ -124,7 +124,7 @@ export default {
     },
     onUserChannelClick (channel, index) {
     // 判断是否为true 如果为true 则执行删除 为false则执行切换
-      if (this.isEdit) {
+      if (this.isEdit && index !== 0) {
       // 删除
         this.deleChennel(channel, index)
       } else {
