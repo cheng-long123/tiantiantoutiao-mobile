@@ -35,7 +35,11 @@
                 </van-button>
                     </div>
                     <!-- 内容 -->
-                    <div class="markdown-body " v-html="article.content">
+                    <div
+                    class="markdown-body"
+                    v-html="article.content"
+                    ref="article-content"
+                    >
                     </div>
                     <!-- 结尾 -->
                     <van-divider>正文结束</van-divider>
@@ -77,6 +81,8 @@ import {
   delLike
 } from '@/api/article'
 import { addFollowed, delFollowed } from '@/api/user'
+import { ImagePreview } from 'vant'
+
 export default {
   name: 'ArticleIndex',
   props: {
@@ -99,6 +105,27 @@ export default {
       const { data } = await getArticle(this.articleId)
       console.log(data)
       this.article = data.data
+      this.$nextTick(() => {
+        this.ImagePreview()
+      })
+    },
+    ImagePreview () {
+      // 获取文章内容中DOM元素
+      const articleContent = this.$refs['article-content']
+      //   获取内容中的img标签
+      const imgs = articleContent.querySelectorAll('img')
+      const imgPaths = []
+      imgs.forEach((img, index) => {
+        imgPaths.push(img.src)
+        img.onclick = function () {
+          ImagePreview({
+            images: imgPaths,
+            startPosition: index,
+            closeable: true
+          })
+        }
+      })
+      console.log(imgs)
     },
     // 关注
     async onFollow () {
