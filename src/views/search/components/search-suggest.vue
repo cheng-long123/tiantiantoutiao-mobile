@@ -4,7 +4,9 @@
       v-for="(str, index) in suggest"
       :key="index"
       icon="search"
-      :title="str">
+      @click="$emit('search', str)"
+      >
+      <div slot="title" v-html="highlight(str)"></div>
       </van-cell>
   </div>
 </template>
@@ -38,7 +40,14 @@ export default {
       immediate: true
     }
   },
-  methods: {},
+  methods: {
+    highlight (str) {
+      const reg = new RegExp(this.searchText, 'gi')
+      return str.replace(reg,
+          `<span style="color: #3296fa">${this.searchText}</span>`
+      )
+    }
+  },
   created () {},
   mounted () {},
   beforeDestroy () {}
