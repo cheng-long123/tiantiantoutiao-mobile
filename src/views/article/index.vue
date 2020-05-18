@@ -43,10 +43,10 @@
                     </div>
                     <!-- 结尾 -->
                     <van-divider>正文结束</van-divider>
-
+                     <!-- 评论 -->
+                       <comment-list :source="articleId"/>
             </div>
               <!-- 底部区域 -->
-              <!-- 评论 -->
               <div class="article-bottom">
                   <van-button class="btn" round size="small" >写评论</van-button>
                   <van-icon
@@ -82,6 +82,7 @@ import {
 } from '@/api/article'
 import { addFollowed, delFollowed } from '@/api/user'
 import { ImagePreview } from 'vant'
+import CommentList from './components/comment-list'
 
 export default {
   name: 'ArticleIndex',
@@ -91,7 +92,9 @@ export default {
       required: true
     }
   },
-  components: {},
+  components: {
+    CommentList
+  },
   data () {
     return {
       article: {}, // 文章详情数据
