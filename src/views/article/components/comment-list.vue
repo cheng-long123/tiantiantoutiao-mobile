@@ -24,19 +24,23 @@
            <div class="title">
                <span class="name">{{comment.aut_name}}</span>
                <div class="like">
-                    <van-icon name="good-job-o" />
-                    <span>赞</span>
+                    <van-icon
+                    :name="comment.is_liking ? 'good-job' : 'good-job-o '"
+                    :color="comment.is_liking ?  'red' : '#777' "
+                    @click="onlikings(comment)"
+                    />
+                    <span>{{comment.like_count}}</span>
                </div>
            </div>
-            <div class="content">122222222222222</div>
+            <div class="content">{{comment.content}}</div>
             <div class="foter">
-                <span class="time">{{comment.pubdate}}</span>
+                <span class="time">{{comment.pubdate | relativeTime}}</span>
                 <van-button
                 class="reply"
                 round
                 size="mini"
                 >
-               回复{{comment.reply_count}}
+               {{comment.reply_count}}回复
                 </van-button>
             </div>
        </div>
@@ -46,6 +50,7 @@
 </template>
 <script>
 import { getComments } from '@/api/article'
+import { addLikings, delLikings } from '@/api/user'
 export default {
   name: 'CommentList',
   props: {
@@ -88,6 +93,15 @@ export default {
         //   开启finished
         this.finished = true
       }
+    },
+    // 点赞
+    async onlikings (comment) {
+      if (comment.is_liking) {
+        await delLikings(comment.com_id)
+      } else {
+        await addLikings(comment.com_id)
+      }
+      comment.is_liking = !comment.is_liking
     }
   },
   created () {},
@@ -122,6 +136,7 @@ export default {
             font-size: 16px;
             color: #222222;
             margin: 17px 0 17px 50px;
+            word-wrap:break-word;
         }
         .foter{
             margin-left: 50px;

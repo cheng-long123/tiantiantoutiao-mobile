@@ -106,7 +106,7 @@ export default {
   methods: {
     async getArticle () {
       const { data } = await getArticle(this.articleId)
-      console.log(data)
+      // console.log(data)
       this.article = data.data
       this.$nextTick(() => {
         this.ImagePreview()
@@ -128,7 +128,7 @@ export default {
           })
         }
       })
-      console.log(imgs)
+      // console.log(imgs)
     },
     // 关注
     async onFollow () {
