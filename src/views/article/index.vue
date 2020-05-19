@@ -44,14 +44,24 @@
                     <!-- 结尾 -->
                     <van-divider>正文结束</van-divider>
                      <!-- 评论 -->
-                       <comment-list :source="articleId"/>
+                       <comment-list
+                       :source="articleId"
+                       :list="commentList"
+                       @total_count="totalCount = $event"
+                       @reply-click="replyClick"
+                       />
             </div>
               <!-- 底部区域 -->
               <div class="article-bottom">
-                  <van-button class="btn" round size="small" >写评论</van-button>
+                  <van-button
+                  class="btn"
+                  round size="small"
+                  @click="isPostShow = true"
+                  >
+                  写评论</van-button>
                   <van-icon
                   name="chat-o"
-                  badge="99+"
+                  :badge="totalCount"
                   color="#777777"
                   />
                   <van-icon
@@ -69,10 +79,30 @@
                    color="#777777"
                   />
               </div>
-</div>
+              <!-- 评论弹出层 -->
+                  <van-popup
+                  v-model="isPostShow"
+                  position="bottom"
+                  >
+                   <post-comment
+                   :target="articleId"
+                   @post-success="postSuccess"
+                   />
+                  </van-popup>
+                  <!-- 评论回复 -->
+                  <van-popup
+                  v-model="isReplyShow"
+                  position="bottom"
+                  >
+                  <comment-reply
+                   :comment="replyComment"
+                  />
+                  </van-popup>
+     </div>
 </template>
 <script>
 import './github-markdown.css'
+import PostComment from './components/post-commrnt'
 import {
   getArticle,
   addCollections,
@@ -83,6 +113,7 @@ import {
 import { addFollowed, delFollowed } from '@/api/user'
 import { ImagePreview } from 'vant'
 import CommentList from './components/comment-list'
+import CommentReply from './components/comment-reply'
 
 export default {
   name: 'ArticleIndex',
@@ -93,12 +124,19 @@ export default {
     }
   },
   components: {
-    CommentList
+    CommentList,
+    PostComment,
+    CommentReply
   },
   data () {
     return {
       article: {}, // 文章详情数据
-      isDisabledShow: false // 是否禁用
+      isDisabledShow: false, // 是否禁用
+      isPostShow: false, // 评论弹出层
+      commentList: [],
+      totalCount: 0, // 评论总数量
+      isReplyShow: false, // 回复评论弹出层
+      replyComment: {}
     }
   },
   computed: {},
@@ -171,6 +209,18 @@ export default {
         await addLike(this.articleId)
         this.article.attitude = 1
       }
+    },
+    postSuccess (comment) {
+      // console.log(comment)
+
+      this.commentList.unshift(comment)
+      this.totalCount++
+      this.isPostShow = false
+    },
+    replyClick (comment) {
+      // console.log(comment)
+      this.replyComment = comment
+      this.isReplyShow = true
     }
   },
   created () {

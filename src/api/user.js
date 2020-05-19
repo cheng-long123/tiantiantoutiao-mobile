@@ -49,20 +49,3 @@ export const delFollowed = userId => {
     url: `/app/v1_0/user/followings/${userId}`
   })
 }
-// 对评论和评论回复点赞
-export const addLikings = likingsId => {
-  return request({
-    method: 'POST',
-    url: '/app/v1_0/comment/likings',
-    data: {
-      target: likingsId
-    }
-  })
-}
-// 取消对评论和评论回复点赞
-export const delLikings = likingsId => {
-  return request({
-    method: 'DELETE',
-    url: `/app/v1_0/comment/likings/${likingsId}`
-  })
-}
