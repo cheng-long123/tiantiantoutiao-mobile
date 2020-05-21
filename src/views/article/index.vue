@@ -1,11 +1,11 @@
 <template>
   <div class='article-container'>
-    <van-nav-bar
-        class="app-nav-bar"
-        title="文章详情"
-        left-arrow
-        @click-left="$router.back()"
-    />
+      <van-nav-bar
+          class="app-nav-bar"
+          title="文章详情"
+          left-arrow
+          @click-left="$router.back()"
+        />
         <!-- 标题 -->
     <div class="user-wrap">
         <h1 class="title">{{article.title}}</h1>
@@ -93,16 +93,20 @@
                   <van-popup
                   v-model="isReplyShow"
                   position="bottom"
+                   :style="{ height: '90%' }"
                   >
                   <comment-reply
+                   v-if="isReplyShow"
                    :comment="replyComment"
+                   @close="isReplyShow = false"
+                   :article-id="articleId"
                   />
                   </van-popup>
      </div>
 </template>
 <script>
 import './github-markdown.css'
-import PostComment from './components/post-commrnt'
+import PostComment from './components/post-comment'
 import {
   getArticle,
   addCollections,

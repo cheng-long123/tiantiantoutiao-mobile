@@ -68,7 +68,7 @@ export default {
 }
 </script>
 <style lang='less' scoped>
-.comment {
+.comment-item {
     .avatar {
         float: left;
         width: 35px;
@@ -83,9 +83,13 @@ export default {
            font-weight: 700;
           }
           .like{
+              font-size: 14px;
               float: right;
              display: flex;
              align-items: center;
+            //  span{
+            //      font-size: 14px;
+            //  }
           }
 
        }

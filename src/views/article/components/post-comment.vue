@@ -41,7 +41,7 @@ export default {
   methods: {
     async addComment () {
       const { data } = await addComment({
-        target: this.target,
+        target: this.target.toString(),
         content: this.message,
         art_id: this.articleId ? this.articleId.toString() : null
       })

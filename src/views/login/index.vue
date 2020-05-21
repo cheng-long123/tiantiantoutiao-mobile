@@ -115,9 +115,9 @@ export default {
       } catch (err) {
         // 失败
         console.dir(err)
-        if (err.response.request.status === 400) {
-          Toast.fail('登陆失败,手机号或验证码错误')
-        }
+        // if (err.response.statu === 400) {
+        Toast.fail('登陆失败,手机号或验证码错误')
+        // }
       }
     },
     onFailed (error) {

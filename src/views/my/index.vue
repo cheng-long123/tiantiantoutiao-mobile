@@ -14,7 +14,14 @@
         </div>
       </div>
       <div class="compile-user">
-        <van-button class="compile-user-btn" type="default" round size="small">编辑资料</van-button>
+        <van-button
+          class="compile-user-btn"
+          type="default"
+          round
+          size="small"
+          to="/user/info"
+          >
+          编辑资料</van-button>
       </div>
      </div>
      <van-grid :border="false">

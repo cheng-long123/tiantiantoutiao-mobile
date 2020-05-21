@@ -1,18 +1,18 @@
 <template>
   <div class='comment-list'>
       <van-cell title="全部评论"></van-cell>
-      <van-list
-        v-model="loading"
-        :finished="finished"
-        finished-text="以展示所有评论"
-        @load="onLoad"
+        <van-list
+          v-model="loading"
+          :finished="finished"
+          finished-text="以展示所有评论"
+          @load="onLoad"
+          >
+        <van-cell
+        class="comment"
+        center
+        v-for="(comment, index) in list"
+        :key="index"
         >
-      <van-cell
-      class="comment"
-      center
-      v-for="(comment, index) in list"
-      :key="index"
-      >
       <!-- 评论 -->
       <comment-item
       :comment="comment"
@@ -31,6 +31,10 @@ export default {
     source: {
       type: [Number, String, Object],
       required: true
+    },
+    type: {
+      type: String,
+      default: 'a'
     },
     list: {
       type: Array,
@@ -57,8 +61,8 @@ export default {
     async onLoad () {
       // 异步更新数据
       const { data } = await getComments({
-        type: 'a',
-        source: this.source,
+        type: this.type,
+        source: this.source.toString(),
         offset: this.offset,
         limit: this.limit
       })
