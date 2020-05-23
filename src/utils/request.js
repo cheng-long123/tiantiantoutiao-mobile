@@ -1,9 +1,14 @@
 import axios from 'axios'
 import store from '@/store'
 import jsonBig from 'json-bigint'
+import { Toast } from 'vant'
+import router from '@/router'
 // 请求模块
+const refreshTokenReq = axios.create({
+  baseURL: 'http://ttapi.research.itcast.cn/'
+})
 const request = axios.create({
-  baseURL: 'http://api-toutiao-web.itheima.net',
+  baseURL: 'http://ttapi.research.itcast.cn/',
   transformResponse: [function (data) {
     // 后端返回的数据可能不是 JSON 格式字符串
     // 如果不是的话，那么 JSONbig.parse 调用就会报错
@@ -36,6 +41,52 @@ request.interceptors.request.use(function (config) {
 })
 
 // 响应拦截器
+request.interceptors.response.use(function (response) {
+  // Any status code that lie within the range of 2xx cause this function to trigger
+  // Do something with response data
+  return response
+}, async function (error) {
+  const status = error.response.status
+  if (status === 400) {
+    Toast('客户端请求参数错误无')
+  } else if (status === 401) {
+    const { user } = store.state
+    if (!user || !user.token) {
+      return reidrectLogin()
+    }
+    try {
+      const { data } = await refreshTokenReq({
+        method: 'PUT',
+        url: '/app/v1_0/authorizations',
+        headers: {
+          Authorization: `Bearer ${user.refresh_token}`
+        }
+      })
+      user.token = data.data.token
+      store.commit('setUser', user)
+      return request(error.config)
+    } catch (err) {
+      reidrectLogin()
+    }
+    Toast('登录过期，请重新登录')
+  } else if (status === 403) {
+    Toast('没有操作权限')
+  } else if (status >= 500) {
+    Toast('服务器异常')
+  }
 
-// 到处request
+  // Any status codes that falls outside the range of 2xx cause this function to trigger
+  // Do something with response error
+  return Promise.reject(error)
+})
+
+function reidrectLogin () {
+  router.replace({
+    name: 'login',
+    query: {
+      redirect: router.currentRoute.fullPath
+    }
+  })
+}
+// 导出request
 export default request

@@ -47,7 +47,12 @@
     v-else
     class="not-login"
     >
-    <img @click = "$router.push('./login')" src="./shouji.png" alt="">
+    <img @click = "$router.push({
+      name:'login',
+      query: {
+        redirect: '/my'
+      }
+    })" src="./shouji.png" alt="">
     <span>登录/注册</span>
     </div>
     <van-grid :column-num="2" class="icon-grid" >
@@ -55,7 +60,7 @@
     <van-grid-item class="icon" icon-prefix="icon" icon="lishi" text="历史" />
     </van-grid>
     <van-cell title="消息通知" is-link to=""/>
-    <van-cell title="小智同学" is-link to=""/>
+    <van-cell title="小智同学" is-link to="/user/chat"/>
     <van-cell
     v-if="user"
     class="dropout"

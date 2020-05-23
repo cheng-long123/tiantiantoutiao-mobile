@@ -109,9 +109,11 @@ export default {
         const { data } = await login(this.user)
         this.$store.commit('setUser', data.data)
         console.log(data)
+        this.$store.commit('removeCachePage', 'LayoutIndex')
         // 成功
         Toast.success('登陆成功')
-        this.$router.back()
+        // this.$router.back()
+        this.$router.push(this.$route.query.redirect || '/')
       } catch (err) {
         // 失败
         console.dir(err)

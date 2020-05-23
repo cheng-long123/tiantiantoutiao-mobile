@@ -74,6 +74,7 @@
               :style="{ height: '100%' }"
               >
               <update-photo
+               v-if="isPhotoShow"
               :file="file"
                @close="isPhotoShow = false"
                @update-photo="profile.photo = $event"
